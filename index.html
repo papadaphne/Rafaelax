@@ -19,13 +19,13 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Prevent body scroll when sidebar is open on mobile */
+            overflow: hidden; 
         }
         .modal {
-            display: none; /* Hidden by default */
+            display: none; 
         }
         .modal.show {
-            display: flex; /* Show when active */
+            display: flex; 
         }
         .sidebar-icon {
             transition: all 0.2s ease-in-out;
@@ -42,11 +42,11 @@
         }
 
         .item-card {
-            border: 1px solid #e5e7eb; /* gray-200 */
+            border: 1px solid #e5e7eb; 
             border-radius: 0.5rem;
             padding: 1rem;
             margin-bottom: 1rem;
-            background-color: #f9fafb; /* gray-50 */
+            background-color: #f9fafb; 
         }
         .item-card-header {
             display: flex;
@@ -61,18 +61,16 @@
         }
         .item-card .form-group label {
             display: block;
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500; /* medium */
-            color: #374151; /* gray-700 */
+            font-size: 0.875rem; 
+            font-weight: 500; 
+            color: #374151; 
             margin-bottom: 0.25rem;
         }
         .item-card .form-group input {
             width: 100%;
         }
 
-
-        /* --- Mobile Specific Styles --- */
-        @media (max-width: 767px) { /* Tailind's 'md' breakpoint is 768px */
+        @media (max-width: 767px) { 
             .sidebar-desktop {
                 position: fixed;
                 top: 0;
@@ -80,7 +78,7 @@
                 height: 100vh;
                 transform: translateX(-100%);
                 transition: transform 0.3s ease-in-out;
-                z-index: 50; /* Above main content */
+                z-index: 50;
             }
             .sidebar-desktop.open {
                 transform: translateX(0);
@@ -93,16 +91,15 @@
                 width: 100%;
                 height: 100%;
                 background-color: rgba(0, 0, 0, 0.5);
-                z-index: 40; /* Below sidebar */
+                z-index: 40; 
             }
             .overlay.open {
                 display: block;
             }
             .main-content {
-                margin-left: 0 !important; /* Override potential desktop margin */
+                margin-left: 0 !important;
             }
 
-            /* Table Responsiveness for Mobile */
             .responsive-table table,
             .responsive-table thead,
             .responsive-table tbody,
@@ -119,18 +116,18 @@
             .responsive-table tr {
                 border: 1px solid #ddd;
                 margin-bottom: 0.5rem;
-                background-color: white; /* Ensure rows have background */
-                border-radius: 0.5rem; /* Rounded corners for card effect */
-                box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* Subtle shadow */
+                background-color: white; 
+                border-radius: 0.5rem; 
+                box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             }
             .responsive-table td {
                 border: none;
                 position: relative;
-                padding-left: 50%; /* Space for the pseudo-element label */
+                padding-left: 50%;
                 text-align: right;
                 padding-top: 0.75rem;
                 padding-bottom: 0.75rem;
-                font-size: 0.9rem; /* Slightly smaller font */
+                font-size: 0.9rem;
             }
             .responsive-table td::before {
                 content: attr(data-label);
@@ -141,18 +138,17 @@
                 white-space: nowrap;
                 text-align: left;
                 font-weight: bold;
-                color: #4b5563; /* gray-700 */
+                color: #4b5563; 
             }
             .responsive-table td select {
-                width: auto; /* Allow select to shrink */
-                display: inline-block; /* Prevent full width */
+                width: auto; 
+                display: inline-block; 
             }
             .responsive-table td .flex {
-                justify-content: flex-end; /* Align actions to the right */
+                justify-content: flex-end; 
             }
         }
 
-        /* Invoice styling for PDF generation */
         #invoice-template {
             display: none;
             width: 80mm;
@@ -217,8 +213,15 @@
         <main class="flex-1 p-6 md:p-10 overflow-y-auto mt-16 md:mt-0 main-content">
             
             <div id="dashboard-view">
-                <h1 class="text-3xl font-bold mb-2">Dashboard</h1>
-                <p class="text-gray-500 mb-8">Ringkasan bisnis Anda saat ini.</p>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-4">
+                    <h1 class="text-3xl font-bold">Dashboard</h1>
+                    <div class="flex items-center gap-4 w-full sm:w-auto">
+                        <select id="filter-bulan-dashboard" onchange="updateDashboard()" class="w-full sm:w-auto p-2 border rounded-lg bg-white shadow-sm">
+                            <option value="semua">Semua Bulan</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="text-gray-500 mb-8">Ringkasan bisnis Anda berdasarkan periode yang dipilih.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="card bg-white p-6 rounded-xl shadow-md">
                         <div class="flex items-center">
@@ -266,7 +269,7 @@
                     </div>
                 </div>
                 <div class="mt-8 bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-xl font-bold mb-4">Pesanan Terbaru</h2>
+                    <h2 class="text-xl font-bold mb-4">Pesanan Terbaru di Periode Ini</h2>
                     <div id="pesanan-terbaru-list" class="space-y-2">
                         <p class="text-gray-500">Belum ada pesanan.</p>
                     </div>
@@ -372,9 +375,15 @@
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-3xl max-h-[90vh] flex flex-col">
             <h2 class="text-2xl font-bold mb-6">Tambah Pesanan Baru</h2>
             <form id="pesanan-form" class="flex-grow overflow-y-auto pr-4 -mr-4">
-                <div class="form-group">
-                    <label for="nama-pelanggan">Nama Pelanggan</label>
-                    <input type="text" id="nama-pelanggan" placeholder="Nama Pelanggan" class="w-full p-3 border rounded-lg" required>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="nama-pelanggan">Nama Pelanggan</label>
+                        <input type="text" id="nama-pelanggan" placeholder="Nama Pelanggan" class="w-full p-3 border rounded-lg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hp-pelanggan">No. HP / WA</label>
+                        <input type="tel" id="hp-pelanggan" placeholder="081234567890" class="w-full p-3 border rounded-lg">
+                    </div>
                 </div>
                 
                 <hr class="my-6">
@@ -455,6 +464,10 @@
                 <span class="detail-label">CUSTOMER</span>
                 <span class="detail-value" id="invoice-customer-name"></span>
             </div>
+            <div class="detail-row">
+                <span class="detail-label">NO. HP</span>
+                <span class="detail-value" id="invoice-customer-hp"></span>
+            </div>
         </div>
         <hr>
         <div class="invoice-details">
@@ -512,8 +525,8 @@
             db = JSON.parse(savedDb);
         }
         
+        populateAllBulanFilters(); 
         updateDashboard();
-        populateBulanFilter(); 
         renderPesananTable();
         renderKaryawanTable();
         updateLaporan();
@@ -573,6 +586,7 @@
     function openModal(modalId) {
         document.getElementById(modalId).classList.add('show');
         if (modalId === 'pesanan-modal') {
+            document.getElementById('pesanan-form').reset();
             document.getElementById('order-items-container').innerHTML = '';
             tambahItem();
             hitungTotalInvoice();
@@ -581,17 +595,21 @@
 
     function closeModal(modalId) {
         document.getElementById(modalId).classList.remove('show');
-        if (modalId === 'pesanan-modal') {
-            document.getElementById('pesanan-form').reset();
-            document.getElementById('order-items-container').innerHTML = '';
-        }
     }
 
     // --- FUNGSI DASHBOARD ---
+    // PERBAIKAN 1: Dashboard diupdate berdasarkan filter
     function updateDashboard() {
-        const totalPesanan = db.pesanan.length;
-        const totalPenjualan = db.pesanan.reduce((sum, p) => sum + p.hargaJual, 0);
-        const totalHpp = db.pesanan.reduce((sum, p) => sum + p.hpp, 0);
+        const filterValue = document.getElementById('filter-bulan-dashboard').value;
+        
+        let filteredPesanan = db.pesanan;
+        if (filterValue !== 'semua') {
+            filteredPesanan = db.pesanan.filter(p => p.tanggal.startsWith(filterValue));
+        }
+
+        const totalPesanan = filteredPesanan.length;
+        const totalPenjualan = filteredPesanan.reduce((sum, p) => sum + p.hargaJual, 0);
+        const totalHpp = filteredPesanan.reduce((sum, p) => sum + p.hpp, 0);
         const labaKotor = totalPenjualan - totalHpp;
 
         document.getElementById('total-pesanan').textContent = totalPesanan;
@@ -601,10 +619,10 @@
         
         const listContainer = document.getElementById('pesanan-terbaru-list');
         listContainer.innerHTML = '';
-        if (db.pesanan.length === 0) {
-            listContainer.innerHTML = '<p class="text-gray-500">Belum ada pesanan.</p>';
+        if (filteredPesanan.length === 0) {
+            listContainer.innerHTML = '<p class="text-gray-500">Belum ada pesanan di periode ini.</p>';
         } else {
-            const recentPesanan = db.pesanan.slice(-5).reverse();
+            const recentPesanan = filteredPesanan.slice(-5).reverse();
             recentPesanan.forEach(p => {
                 const item = document.createElement('div');
                 item.className = 'flex justify-between items-center p-2 rounded-lg hover:bg-gray-50';
@@ -702,7 +720,7 @@
             });
         });
 
-        if (items.length === 0 || items[0].produk === '') {
+        if (items.length === 0 || !items[0].produk) {
             showNotification('Pesanan harus memiliki minimal satu item.', false);
             return;
         }
@@ -716,6 +734,7 @@
             id: Date.now(),
             invoice: `INV-${Date.now().toString().slice(-6)}`,
             pelanggan: document.getElementById('nama-pelanggan').value,
+            hp: document.getElementById('hp-pelanggan').value, // PERBAIKAN 2: Simpan No. HP
             hargaJual: totalHargaJual,
             items: items,
             hpp: hpp,
@@ -724,37 +743,56 @@
         };
 
         db.pesanan.push(pesananBaru);
-        this.reset();
         closeModal('pesanan-modal');
-        populateBulanFilter(); 
-        renderPesananTable();
+        populateAllBulanFilters(); 
         updateDashboard();
+        renderPesananTable();
         updateLaporan();
         saveData();
         showNotification('Pesanan baru berhasil ditambahkan!');
     });
 
-    function populateBulanFilter() {
-        const filterSelect = document.getElementById('filter-bulan-pesanan');
+    // PERBAIKAN 1: Fungsi tunggal untuk mengisi semua filter bulan
+    function populateAllBulanFilters() {
+        const filterSelects = [
+            document.getElementById('filter-bulan-dashboard'),
+            document.getElementById('filter-bulan-pesanan')
+        ];
         
         const monthsInDb = [...new Set(db.pesanan.map(p => p.tanggal.substring(0, 7)))];
         monthsInDb.sort().reverse();
-        
-        const selectedValue = filterSelect.value;
-        
-        while (filterSelect.options.length > 1) {
-            filterSelect.remove(1);
+
+        const now = new Date();
+        const currentMonthYear = now.toISOString().substring(0, 7); // "YYYY-MM"
+        if (!monthsInDb.includes(currentMonthYear)) {
+            monthsInDb.unshift(currentMonthYear);
         }
 
-        monthsInDb.forEach(monthYear => {
-            const [year, month] = monthYear.split('-');
-            const date = new Date(year, month - 1);
-            const monthName = date.toLocaleString('id-ID', { month: 'long', year: 'numeric' });
-            const option = new Option(monthName, monthYear);
-            filterSelect.add(option);
+        filterSelects.forEach(filterSelect => {
+            if (!filterSelect) return;
+            const selectedValue = filterSelect.value;
+            
+            while (filterSelect.options.length > 1) {
+                filterSelect.remove(1);
+            }
+
+            monthsInDb.forEach(monthYear => {
+                const [year, month] = monthYear.split('-');
+                const date = new Date(year, month - 1);
+                const monthName = date.toLocaleString('id-ID', { month: 'long', year: 'numeric' });
+                const option = new Option(monthName, monthYear);
+                filterSelect.add(option);
+            });
+            
+            if (selectedValue && monthsInDb.includes(selectedValue)) {
+                filterSelect.value = selectedValue;
+            } else {
+                 // Default dashboard ke bulan ini
+                if(filterSelect.id === 'filter-bulan-dashboard') {
+                    filterSelect.value = currentMonthYear;
+                }
+            }
         });
-        
-        filterSelect.value = selectedValue;
     }
     
     function renderPesananTable() {
@@ -933,12 +971,11 @@
         document.getElementById('laporan-laba-bersih').textContent = formatRupiah(labaBersih);
     }
     
-    // --- PERBAIKAN: FUNGSI DOWNLOAD CSV YANG LEBIH BAIK ---
     function formatCsvCell(data) {
         let cell = data === null || data === undefined ? '' : String(data);
-        cell = cell.replace(/"/g, '""'); // Escape double quotes
+        cell = cell.replace(/"/g, '""'); 
         if (cell.search(/("|,|\n)/g) >= 0) {
-            cell = `"${cell}"`; // Enclose in double quotes if it contains comma, newline, or double quote
+            cell = `"${cell}"`;
         }
         return cell;
     }
@@ -979,7 +1016,7 @@
         rows.push([]);
 
         rows.push(['Detail Transaksi Pesanan']);
-        rows.push(['Tanggal', 'Invoice', 'Pelanggan', 'Harga Jual', 'HPP', 'Detail Item']);
+        rows.push(['Tanggal', 'Invoice', 'Pelanggan', 'No. HP', 'Harga Jual', 'HPP', 'Detail Item']);
         pesananBulanIni.forEach(p => {
             const tgl = new Date(p.tanggal).toLocaleDateString('id-ID');
             const itemDetails = p.items.map(item => {
@@ -987,9 +1024,9 @@
                 if (item.ukuran) detail += ` (${item.ukuran})`;
                 detail += ` x${item.jumlah} -> ${formatRupiah(item.jumlah * item.harga)}`;
                 return detail;
-            }).join(' | '); // Join with pipe for readability inside the cell
+            }).join(' | ');
 
-            rows.push([tgl, p.invoice, p.pelanggan, p.hargaJual, p.hpp, itemDetails]);
+            rows.push([tgl, p.invoice, p.pelanggan, p.hp, p.hargaJual, p.hpp, itemDetails]);
         });
         rows.push([]);
 
@@ -1023,6 +1060,7 @@
         }
 
         document.getElementById('invoice-customer-name').textContent = pesanan.pelanggan;
+        document.getElementById('invoice-customer-hp').textContent = pesanan.hp || '-'; // PERBAIKAN 2: Tampilkan No. HP
         document.getElementById('invoice-id').textContent = pesanan.invoice;
         const invoiceDateTime = new Date(pesanan.tanggal);
         const formattedDate = invoiceDateTime.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
@@ -1095,7 +1133,7 @@
 
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'rafaela-print-cache-v3';
+                const CACHE_NAME = 'rafaela-print-cache-v4';
                 const URLS_TO_CACHE = ['./', 'https://cdn.tailwindcss.com', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'rafaela_logo_mono.png', 'qris-rafaela.png'];
                 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(URLS_TO_CACHE))));
                 self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
